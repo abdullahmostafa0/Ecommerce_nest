@@ -7,6 +7,7 @@ import { Request } from "express";
 import { AuthGuard } from "src/common/Guards/auth.guard";
 import { RoleGuard } from "src/common/Guards/role.guard";
 import { Role } from "src/common/Decorator/role.decorator";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @Controller('seller/product')
 @Role(["seller"])
@@ -45,10 +46,22 @@ export class ProductController {
     async findAll(
         @Query() productFilterDTO: ProductFilterDTO,
         ) {
-        const products = await this.productService.findAll(productFilterDTO)
+            
+        return await this.productService.findAll(productFilterDTO)
+    }
+    @UseInterceptors(CacheInterceptor)
+    @Get("all")
+    async all() {
+        const products = await this.productService.all()
         return {
             message: 'Done',
             products
         }
+    }
+
+    @UseInterceptors(CacheInterceptor)
+    @Get()
+    async test () {
+        return this.productService.test()
     }
 }

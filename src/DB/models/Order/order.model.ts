@@ -17,6 +17,9 @@ export class Order {
     note?: string;
 
     @Prop({ type: String, required: false })
+    intentId: string;
+
+    @Prop({ type: String, required: false })
     rejectedReason: string;
 
     @Prop({ type: Date, required: false })
@@ -30,6 +33,11 @@ export class Order {
 
     @Prop({ type: Number, required: false })
     discountAmount?: number;
+
+    @Prop({ type: Number, required: false })
+    refundAmount?: number;
+    @Prop({ type: Date, required: false })
+    refundDate?: Date;
 
     @Prop({ type: Number, required: true })
     subTotal: number;
@@ -52,6 +60,9 @@ export class Order {
 
     }]))
     products: IorderProduct[];
+
+    @Prop({type: Number, required: true})
+    finalPrice:number
 
 }
 

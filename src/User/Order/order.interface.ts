@@ -51,7 +51,7 @@ export interface IOrder extends IOrderInputs {
     subTotal:number,
     discountAmount?:number,
     finalPrice:number,
-
+    intentId?: string,
     updatedAt:Date,
     createdAt:Date
 }

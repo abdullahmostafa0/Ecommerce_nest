@@ -38,4 +38,18 @@ export class signinDTO {
 
 }
 
+export class confirmDTO {
+    @IsString()
+    @IsNotEmpty()
+    @IsEmail()
+    @MinLength(3)
+    email: string;
+
+
+    
+    @IsNotEmpty()
+    otp: string;
+
+}
+
 

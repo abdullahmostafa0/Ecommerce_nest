@@ -9,6 +9,7 @@ import { OrderRepository } from "src/DB/models/Order/order.repository";
 import { ProductRepository } from "src/DB/models/Product/product.repository";
 import { CartService } from "../Cart/cart.service";
 import { PaymentService } from "src/common/service/payment.service";
+import { RealtimeGateway } from "src/gateway/gateway";
 
 @Module({
     imports:[CartModel, ProductModel, OrderModel],
@@ -19,6 +20,7 @@ import { PaymentService } from "src/common/service/payment.service";
         OrderRepository, 
         ProductRepository, 
         CartService,
-        PaymentService],
+        PaymentService,
+        RealtimeGateway],
 })
 export class OrderModule {}

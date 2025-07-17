@@ -1,7 +1,7 @@
 
 import { Body, Controller, Post, UsePipes, ValidationPipe } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { signinDTO, signupDTO } from "./dto";
+import { confirmDTO, signinDTO, signupDTO } from "./dto";
 import { signupSchema, signupType } from "./schemas/schema";
 import { ZodValidationPipe } from "src/common/Pipes/zod.validation.pipe";
 
@@ -23,6 +23,12 @@ export class AuthController {
     async signin(@Body() body: signinDTO) {
         const user = await this.authService.signin(body);
         return {message:"User signed in successfully", data: user};
+    }
+
+    @Post("confirm")
+    async confirm(@Body() body: confirmDTO) {
+        const user = await this.authService.confirmEmail(body);
+        return {message:"Done", data: user};
     }
 
 

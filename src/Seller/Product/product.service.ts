@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { CloudService } from "src/common/service/cloud.service";
 import { ProductRepository } from "src/DB/models/Product/product.repository";
 import { CreateProductDTO, ProductFilterDTO, UpdateProductDTO } from "./DTO";
@@ -11,9 +11,12 @@ import { discountTypeEnum, productType } from "src/DB/models/Product/product.mod
 import { calculateFinalPrice } from "src/common/Utility/finalPrice";
 import slugify from "slugify";
 import { IPaginate } from "src/DB/db.service";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 @Injectable()
 export class ProductService {
     constructor(
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
         private readonly productRepository: ProductRepository,
         private readonly categoryRepository: CategoryRepository,
         private readonly cloudService: CloudService
@@ -124,7 +127,21 @@ export class ProductService {
         return productUpdated;
     }
 
-    async findAll(query: ProductFilterDTO): Promise<productType[] | [] | IPaginate<productType>>  {
+    async findAll(query: ProductFilterDTO): Promise<{
+        message: string,
+        data: productType[] | [] | IPaginate<productType>
+    }> {
+
+        let cacheName = 'products'
+        if (Object.keys(query)?.length) {
+            cacheName = JSON.stringify(query)
+        }
+        const cachedData = await this.cacheManager.get(cacheName)
+        if (cachedData) {
+            return { message: 'Done-Cached', data: JSON.parse(cachedData as string) }
+        }
+
+
 
         let filter: FilterQuery<productType> = {}
         if (query.name) {
@@ -135,23 +152,39 @@ export class ProductService {
                 ]
             }
         }
-        if(query.maxPrice || query.minPrice)
-        {
-            const max = query.maxPrice ? {$lte: query.maxPrice} : {}
+        if (query.maxPrice || query.minPrice) {
+            const max = query.maxPrice ? { $lte: query.maxPrice } : {}
             filter.finalPrice = {
-                $gte:query.minPrice || 0, ...max
+                $gte: query.minPrice || 0, ...max
             }
         }
 
         const products = await this.productRepository.findAll({
             filter,
-            sort:query.sort,
-            page:query.page,
-            select:query.select,
-            population:[{path:"createdBy"}]
+            sort: query.sort,
+            page: query.page,
+            select: query.select,
+            population: [{ path: "createdBy" }]
         })
+        await this.cacheManager.set(cacheName, JSON.stringify(products))
 
+        return { message: "Done", data: products };
+    }
 
+    async all(): Promise<productType[] | [] | IPaginate<productType>> {
+
+        const products = await this.productRepository.findAll({
+
+            population: [{ path: "createdBy" }]
+        })
         return products;
+    }
+
+    async test() {
+        let name = await this.cacheManager.get('name')
+        if (!name) {
+            name = await this.cacheManager.set('name', 'abdullah')
+        }
+        return { message: "Done" }
     }
 }

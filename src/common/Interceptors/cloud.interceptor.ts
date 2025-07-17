@@ -25,7 +25,7 @@ export class CloudInterceptor implements NestInterceptor {
         }
         return next.handle().pipe(
             catchError((err)=>{
-                this.cloudService.deleteFolder(request.body.image.folderId)
+                this.cloudService.deleteFolder(request.body.image?.folderId)
                 return throwError(()=>err)
             })
         )

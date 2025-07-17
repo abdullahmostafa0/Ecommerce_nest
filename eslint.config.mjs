@@ -38,7 +38,9 @@ export default tseslint.config(
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/no-unnecessary-type-assertion": "off",
       "eslint-disable @typescript-eslint/restrict-plus-operands" :"off",
-      "eslint-disable prefer-const" : "off"
+      "eslint-disable prefer-const" : "off",
+      "eslint-disable no-unsafe-optional-chaining":"off",
+      "eslint-disable @typescript-eslint/require-await" : "off"
 
     },
   },

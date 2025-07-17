@@ -45,8 +45,8 @@ export class CategoryService {
             name,
             createdBy: user.id as Types.ObjectId,
             image: {
-                secure_url: createCategoryDTO.image.secure_url,
-                public_id: createCategoryDTO.image.public_id
+                secure_url: createCategoryDTO.image?.secure_url,
+                public_id: createCategoryDTO.image?.public_id
             },
             folderId: createCategoryDTO.image.folderId
 
