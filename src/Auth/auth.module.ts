@@ -2,7 +2,7 @@
 import { Global, Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { UserRepository } from "src/DB/models/User/user.repository";
+import { UserRepository } from "../DB/models/User/user.repository";
 import { UserModel } from "src/DB/models/User/user.model";
 import { TokenService } from "src/common/service/token.service";
 import { JwtService } from "@nestjs/jwt";

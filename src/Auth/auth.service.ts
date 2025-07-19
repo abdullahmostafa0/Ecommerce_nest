@@ -1,7 +1,7 @@
 
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { confirmDTO, signinDTO, signupDTO } from "./dto";
-import { UserRepository } from "src/DB/models/User/user.repository";
+import { UserRepository } from "../DB/models/User/user.repository";
 import { compare, hash } from "src/common/security/password.security";
 import { TypeUser } from "src/DB/models/User/user.model";
 import { sendEmail } from "src/common/Utility/sendEmail";
