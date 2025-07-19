@@ -9,8 +9,10 @@ import { SellerModule } from './Seller/seller.module';
 import { GatewayModule } from './gateway/gateway.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { createKeyv } from '@keyv/redis';
-
+import { AppController } from './app.controller';
+console.log(process.env.DB_URL)
 @Module({
+  controllers :[AppController],
   imports: [
     AuthModule, 
     MongooseModule.forRoot(process.env.DB_URL as string),
@@ -29,7 +31,6 @@ import { createKeyv } from '@keyv/redis';
 
     
   ],
-  controllers: [],
   providers: [],
 })
 export class AppModule {}
